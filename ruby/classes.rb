@@ -72,7 +72,7 @@ puts(t1.inspect);
 
 p(t1);
 
-
+# this is the example of superclass and sub class.....
 class Beast
     def initialize(as,bs)
         @an=as;
