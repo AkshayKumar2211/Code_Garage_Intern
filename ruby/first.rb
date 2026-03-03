@@ -113,3 +113,14 @@ p="Learn to print in ruby...";
 for a in 1..5 do
     puts p;
 end
+
+
+
+age = 19
+puts "Welcome to a life of debt." unless age < 18
+
+unless age < 18
+  puts "Down with that sort of thing."
+else
+  puts "Careful now!"
+end

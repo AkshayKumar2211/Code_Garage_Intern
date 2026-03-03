@@ -3,8 +3,8 @@ class GetSetter
         puts "This is the getter and the setter class...";
     end
 
-    def setter =(taste)
-        @taste=taste;
+    def setter=(taste)  # do not provide space here  it will throw a syntax error... setter 
+        @taste = taste
     end
 
     def getter
@@ -15,14 +15,20 @@ end
 
 t1=GetSetter.new;
 
-t1.setter 'Spicy' ;
+t1.setter = 'Spicy'
 
 puts(t1.getter);
 
 
-# for i in 1..5 
-#     puts i;
-# end
+
+age=50;
+
+unless age<18
+    puts "Get a job....";
+end
+
+
+
 
 
 
