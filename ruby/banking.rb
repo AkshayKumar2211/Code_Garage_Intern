@@ -74,9 +74,12 @@ class Bank
     def  transferMoney (amount)
         if(amount > @balance || @balance==0)
             puts "-----------------------------------------Insufficient Balance in the account please deposite some money-----------------------------------"
+            return false
         else    
             @balance-=amount
             puts "Amount transefer successfully................."
+            puts "Your balance #{@balance}"
+            return true
         end
     end
 
@@ -86,14 +89,18 @@ end
 
 puts "----------------------------------------Welcome to Bank of Robbers----------------------------------------"
 
+isValidUsername=/^[0-9A-Za-z ]{6,16}$/
+isPassWordValidate=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+
+
 
 while true
  
     puts "----------------------------------------Press 1 for signup------------------------------------------------\n
-    ----------------------------------------------Press 2 for exit----------------------------------------------------"
-    # ----------------------------------------------Press 2 for login--------------------------------------------------\n
+    ----------------------------------------------Press 2 for login--------------------------------------------------\n
+    ----------------------------------------------Press 3 for exit----------------------------------------------------"
     chioce=gets.to_i  
-    if(chioce>=1 && chioce<=2)
+    if(chioce>=1 && chioce<=3)
         break
     end
     puts "please enter a valid"
@@ -101,36 +108,69 @@ while true
 end
 
 if chioce==1
-    puts:"-----------------------------------------Welcome to the signup page----------------------------------------"
+    puts:"-----------------------------------------Welcome to the signup page----------------------------------------"  
         puts:"Enter your name ::"
         name=gets();
-        
+
+        while(!(name.match(isValidUsername)))
+            puts:"Enter a name with more than 4 character .... "
+            name=gets()
+        end
+    
         puts "Enter your password ::"
         password=gets()
-        account1=Bank.new(name,password)
+        while(!(password.match(isPassWordValidate)))
+            puts "Enter a strong password please::"
+            password=gets()
+        end
+
+        defaultUser=Bank.new(name,password)
         puts "Heres your account details:::"
-        account1.showBankDetail()
+        defaultUser.showBankDetail()
         puts  "-----------------------------------welcome to the login page------------------------------------------"
-        chioce=3
+        chioce=2
 end
 
-if chioce==3
+if chioce==2
     while true
         puts "Please enter your name :::"
         name=gets()
         puts "Please enter your password :::"
         password=gets()
 
-        con=account1.login(name,password)
+        defaultUser=Bank.new(name,password);
+
+     
+            con=defaultUser.login(name,password)
+
         if(con)
             break
         end
     end
 end
 
-if chioce==2
+if chioce==4
+    while true
+        puts "Please enter your name :::"
+        name=gets()
+        puts "Please enter your password :::"
+        password=gets()
+
+        con=false
+     
+            con=defaultUser.login(name,password)
+
+        if(con)
+            break
+        end
+    end
+end
+
+if chioce==3
     exit
 end
+
+
 
 
 
@@ -163,9 +203,8 @@ while true
             amount=gets();
             amount=amount.to_f
             end
-            
         
-        account1.deposite(amount)
+        defaultUser.deposite(amount)
 
         when 2
             puts "----------------------------------Welcome to the withdraw amount page------------------------------------"
@@ -180,7 +219,7 @@ while true
             withdraw=withdraw.to_f
             end
 
-            account1.withdraw(withdraw)
+            defaultUser.withdraw(withdraw)
 
         when 3
             puts "--------------------------------------Welcome to transfer money page--------------------------------------"
@@ -198,11 +237,17 @@ while true
             puts "Enter transfer account number::::"
             n=gets()
 
-            account1.transferMoney(transfer)
+            transferss=Bank.new("DefaultAccount","transfer@123");
 
+           con= defaultUser.transferMoney(transfer)
+           if(con)
+            transferss.deposite(transfer)
+            puts "Money transfer suceessfully"
+            transferss.showBankDetail()
+           end
         when 4
             puts "----------------------------------------Welcome to account detail page---------------------------------------"
-            account1.showBankDetail()
+            defaultUser.showBankDetail()
 
         when 5
             puts "You have been log out user have been logout ...."
@@ -214,7 +259,7 @@ while true
             puts "Please enter your password :::"
             password=gets()
 
-            con=account1.login(name,password)
+            con=defaultUser.login(name,password)
             if(con)
              break
            end
@@ -224,7 +269,7 @@ while true
             exit
         when 7
             puts "---------------------------------------Here are the balance of the accoun--------------------------------------"
-            account1.checkBalance()
+            defaultUser.checkBalance()
 
         else
             puts "Please enter a valid option "
