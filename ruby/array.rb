@@ -71,6 +71,11 @@ puts arr1;
 arr2=arr.join('-');
 
 puts arr2;
+puts "Print using each do"
+arr.each do |a|
+    puts a
+end
+
 
 
 
