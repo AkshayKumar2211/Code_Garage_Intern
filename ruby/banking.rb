@@ -1,11 +1,16 @@
 
+$users =[]
 class Bank 
-
+  
+    $toatalAccounts=0
     def initialize(name,password)
+
+    
         @userName=name
         @userPassword=password
         @accountNumber= ""
         i=0
+
         s=['a','b','c','d','e','f','g','h','i','1','2','3','4','5','6','7']
         while i<16
             @accountNumber+=s[Random.rand(16)]
@@ -18,8 +23,14 @@ class Bank
             "accountNo"=> @accountNumber,
             "balance" => @balance
         }
-
+        $users.push(@hash)
+        puts "Data in the hash array #{$users}"
+        $toatalAccounts+=1
         puts "------------------------------------------------ Account created successfully ----------------------------------------------------------------"
+    end
+
+    def userInfos
+        return @hash
     end
 
 
@@ -33,6 +44,8 @@ class Bank
             return false
         end
     end
+
+ 
 
 
     def showBankDetail 
@@ -86,6 +99,87 @@ class Bank
 end
 
 
+    loginUserDetail={}
+
+   def loginFromHash (name,password)
+     size=$users.length
+
+     i=0
+     while i<size
+        if ($users[i]["username"]==name && $users[i]["password"]==password)
+            puts "User have been login successfully ....."
+
+            loginUser=
+            {
+                "name" => $users[i]["username"],
+                "password"=>$users[i]["password"],
+                "accountNo"=> $users[i]["accountNo"],
+                "balance" => $users[i]["balance"]
+            }
+            return loginUser
+        end
+            i+=1
+    end   
+    
+    puts "User with this name does not exist please try again ....."
+     
+    end
+
+    
+    # for Deposite in loginUser Account....
+    def loginUserAccountDeposite(loginUser)
+        size=$users.length
+
+        for a in $users
+            if (a["username"]==loginUser["name"])
+                a["balance"]+=loginUser["balance"]
+                puts "Money Deposite successfully "
+                puts "Details of the User Account #{loginUser}"
+                return true
+            end
+
+        end
+
+        puts "Error while deposite money Please try again ...."
+
+    end
+
+
+    #for Withdraw 
+
+    def loginUserAccountWithdraw(loginUser,amount)
+        
+        size=$users.length
+
+        for a in $users
+            if (a["username"]==loginUser["name"])
+                # a["balance"]+=loginUser["balance"]
+                puts "Money Deposite successfully "
+                  if(amount>loginUser["balance"]|| loginUser["balance"]==0)
+                 puts "-----------------------------------------------Insufficient balance in the account--------------------------------------------------------"
+                return false
+                else
+                loginUser["balance"]-=amount
+                a["balance"]-=amount
+                puts "--------------------------------------------------------Withdraw successfull--------------------------------------------------------------"
+                puts "--------------------------------------------------------Remaining balance #{loginUser["balance"]}----------------------------------------------------"
+                return true
+            end
+                puts "Details of the User Account #{loginUser}"
+                return true
+            end
+
+        end
+    
+    end
+
+    # for transfer
+    def loginUserTransfer(loginUser,amount)
+    
+    end
+
+
+
 
 puts "----------------------------------------Welcome to Bank of Robbers----------------------------------------"
 
@@ -94,84 +188,107 @@ isPassWordValidate=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*
 
 
 
+
 while true
  
     puts "----------------------------------------Press 1 for signup------------------------------------------------\n
     ----------------------------------------------Press 2 for login--------------------------------------------------\n
     ----------------------------------------------Press 3 for exit----------------------------------------------------"
-    chioce=gets.to_i  
-    if(chioce>=1 && chioce<=3)
-        break
-    end
-    puts "please enter a valid"
+    chioce=gets.to_i 
 
-end
-
-if chioce==1
-    puts:"-----------------------------------------Welcome to the signup page----------------------------------------"  
+     mainCon=false
+    case chioce
+    when 1
+        puts:"-----------------------------------------Welcome to the signup page----------------------------------------"  
         puts:"Enter your name ::"
         name=gets();
-
+        
         while(!(name.match(isValidUsername)))
             puts:"Enter a name with more than 4 character .... "
             name=gets()
         end
-    
+        
         puts "Enter your password ::"
         password=gets()
         while(!(password.match(isPassWordValidate)))
             puts "Enter a strong password please::"
             password=gets()
         end
-
+        
         defaultUser=Bank.new(name,password)
+        userData=defaultUser.userInfos
         puts "Heres your account details:::"
         defaultUser.showBankDetail()
         puts  "-----------------------------------welcome to the login page------------------------------------------"
         chioce=2
-end
+    
+    # when 2 
+    #     while true
+    #         puts "Please enter your name :::"
+    #         name=gets()
+    #         puts "Please enter your password :::"
+    #         password=gets()
+            
+    #         defaultUser=Bank.new(name,password);
+            
+            
+    #         con=defaultUser.login(name,password)
+            
+    #         if(con)
+    #             break
+    #         end
+    #     end
 
-if chioce==2
-    while true
+    when 2
+        while true
         puts "Please enter your name :::"
         name=gets()
         puts "Please enter your password :::"
         password=gets()
 
-        defaultUser=Bank.new(name,password);
-
-     
-            con=defaultUser.login(name,password)
-
+        con=loginFromHash(name ,password)
+        puts "The login user details are here"
         if(con)
+            loginUserDetail=con
+            puts "The login User Details.... #{loginUserDetail}"
+            mainCon=true
             break
         end
+
     end
-end
 
-if chioce==4
-    while true
-        puts "Please enter your name :::"
-        name=gets()
-        puts "Please enter your password :::"
-        password=gets()
 
-        con=false
-     
+    
+    when 4
+        while true
+            puts "Please enter your name :::"
+            name=gets()
+            puts "Please enter your password :::"
+            password=gets()
+            
+            con=false
+            
             con=defaultUser.login(name,password)
-
-        if(con)
-            break
+            puts "Login User Details......."
+            
+            if(con)
+                break
+            end
         end
+    
+    
+    when 3 
+        exit
+    else
+        puts "please enter a valid input value >>>>>>>>"
+
     end
-end
 
-if chioce==3
-    exit
-end
-
-
-
+    if(mainCon)
+        break
+    end
+    
+end     #first while end here ......
 
 
 
@@ -203,8 +320,13 @@ while true
             amount=gets();
             amount=amount.to_f
             end
+
+            loginUserDetail["balance"]+=amount
+
+            loginUserAccountDeposite(loginUserDetail)
+
         
-        defaultUser.deposite(amount)
+        # defaultUser.deposite(amount)
 
         when 2
             puts "----------------------------------Welcome to the withdraw amount page------------------------------------"
@@ -219,7 +341,8 @@ while true
             withdraw=withdraw.to_f
             end
 
-            defaultUser.withdraw(withdraw)
+            loginUserAccountWithdraw(loginUserDetail,withdraw)
+            # defaultUser.withdraw(withdraw)
 
         when 3
             puts "--------------------------------------Welcome to transfer money page--------------------------------------"

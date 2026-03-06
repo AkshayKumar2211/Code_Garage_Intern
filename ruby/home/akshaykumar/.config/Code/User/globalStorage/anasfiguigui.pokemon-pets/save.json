@@ -1,0 +1,30 @@
+{
+    "money": 75,
+    "pets": [
+        {
+            "specie": "Squirtle",
+            "name": "Blastoise",
+            "color": "generation 1",
+            "form": "Blastoise",
+            "sprite": "blastoise",
+            "spriteSize": 32
+        },
+        {
+            "specie": "Charmander",
+            "name": "Charizard",
+            "color": "generation 1",
+            "form": "Charizard",
+            "sprite": "charizard",
+            "spriteSize": 48
+        },
+        {
+            "specie": "Bulbasaur",
+            "name": "Venusaur",
+            "color": "generation 1",
+            "form": "Venusaur",
+            "sprite": "venusaur",
+            "spriteSize": 32
+        }
+    ],
+    "decoration": []
+}
