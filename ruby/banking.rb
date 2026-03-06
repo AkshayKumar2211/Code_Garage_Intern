@@ -1,4 +1,3 @@
-
 $users =[
     {
            "username" => "Default\n",
@@ -7,7 +6,6 @@ $users =[
             "balance" => 0  
     }
 ]
-
 class Bank 
   
    
@@ -32,7 +30,6 @@ class Bank
             "balance" => @balance
         }
         $users.push(@hash)
-        puts "Data in the hash array #{$users}"
       
         puts "------------------------------------------------ Account created successfully ----------------------------------------------------------------"
     end
@@ -338,7 +335,6 @@ end #first while end here ......
 
 
 #for use in logout case
-
 def reload
 
   isValidUsername=/^[0-9A-Za-z ]{6,16}$/
@@ -552,6 +548,8 @@ while true
     #         break
     #     end
     # end
+        puts "----------------------------------User have been logout---------------------------------------------"
+        puts "-------------------------------Welcome to the Bank of Robbers------------------------------------"
         reload()
         puts "After the reload function....."
          puts "The loginUSerDetail #{$loginUserDetail}"
