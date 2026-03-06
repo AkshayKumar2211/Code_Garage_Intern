@@ -1,5 +1,12 @@
 
-$users =[]
+$users =[
+    {
+          "username" => "Default\n",
+            "password"=> "Default@123\n",
+            "accountNo"=> "defaultaccount",
+            "balance" => 0  
+    }
+]
 class Bank 
   
     $toatalAccounts=0
@@ -103,6 +110,9 @@ end
 
    def loginFromHash (name,password)
      size=$users.length
+     puts "the name and password default user #{name}  #{password}"
+     
+
 
      i=0
      while i<size
@@ -174,9 +184,42 @@ end
     end
 
     # for transfer
-    def loginUserTransfer(loginUser,amount)
-    
+    def loginUserTransfer(loginUser, amount)
+
+    for u in $users
+        puts "Valid Account number for transfer ::: #{u["accountNo"]}"
     end
+
+    puts "Enter one of the above accountNo to transfer money :::::"
+    account = gets.strip
+
+
+    for u in $users
+        if u["username"] == loginUser["name"]
+
+            if amount > u["balance"] || u["balance"] == 0
+                puts "---------------- Insufficient balance ----------------"
+                return false
+            end
+
+            u["balance"] -= amount
+            loginUser["balance"] = u["balance"]
+        end
+    end
+
+
+    for u in $users
+        if u["accountNo"] == account
+            u["balance"] += amount
+            puts "--------------- Transfer successful ----------------"
+            puts "Remaining balance #{loginUser["balance"]}"
+            return true
+        end
+    end
+
+    puts "Account number not found"
+    return false
+end
 
 
 
@@ -357,20 +400,24 @@ while true
             transfer=transfer.to_f
             end
 
-            puts "Enter transfer account number::::"
-            n=gets()
+           
 
-            transferss=Bank.new("DefaultAccount","transfer@123");
+          
 
-           con= defaultUser.transferMoney(transfer)
-           if(con)
-            transferss.deposite(transfer)
+        #     transferss=Bank.new("DefaultAccount","transfer@123");
+
+        #    con= defaultUser.transferMoney(transfer)
+
+           if( loginUserTransfer(loginUserDetail,transfer))
             puts "Money transfer suceessfully"
-            transferss.showBankDetail()
            end
         when 4
             puts "----------------------------------------Welcome to account detail page---------------------------------------"
-            defaultUser.showBankDetail()
+            # defaultUser.showBankDetail()
+            puts "------------------------------------------------User Details-------------------------------------------------"
+            puts "-------------name :: #{loginUserDetail["name"]}--------------"
+            puts "-------------Account NO:: #{loginUserDetail["accountNo"]}-----------"
+            puts "-------------Balance ::  #{loginUserDetail["balance"]}-----------"
 
         when 5
             puts "You have been log out user have been logout ...."
@@ -382,10 +429,13 @@ while true
             puts "Please enter your password :::"
             password=gets()
 
-            con=defaultUser.login(name,password)
+            con=loginFromHash(name ,password)
+                puts "The login user details are here"
             if(con)
-             break
-           end
+                loginUserDetail=con
+                puts "The login User Details.... #{loginUserDetail}"
+            break
+        end
     end
         when 6
             puts "---------------------------------------Your session ended you exit the website---------------------------------"
