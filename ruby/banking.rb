@@ -1,15 +1,16 @@
 
 $users =[
     {
-          "username" => "Default\n",
+           "username" => "Default\n",
             "password"=> "Default@123\n",
             "accountNo"=> "defaultaccount",
             "balance" => 0  
     }
 ]
+
 class Bank 
   
-    $toatalAccounts=0
+   
     def initialize(name,password)
 
     
@@ -32,7 +33,7 @@ class Bank
         }
         $users.push(@hash)
         puts "Data in the hash array #{$users}"
-        $toatalAccounts+=1
+      
         puts "------------------------------------------------ Account created successfully ----------------------------------------------------------------"
     end
 
@@ -106,7 +107,7 @@ class Bank
 end
 
 
-    loginUserDetail={}
+    $loginUserDetail={}
 
    def loginFromHash (name,password)
      size=$users.length
@@ -121,6 +122,7 @@ end
 
             loginUser=
             {
+
                 "name" => $users[i]["username"],
                 "password"=>$users[i]["password"],
                 "accountNo"=> $users[i]["accountNo"],
@@ -164,7 +166,7 @@ end
         for a in $users
             if (a["username"]==loginUser["name"])
                 # a["balance"]+=loginUser["balance"]
-                puts "Money Deposite successfully "
+                # puts "Money Deposite successfully "
                   if(amount>loginUser["balance"]|| loginUser["balance"]==0)
                  puts "-----------------------------------------------Insufficient balance in the account--------------------------------------------------------"
                 return false
@@ -247,7 +249,7 @@ while true
         name=gets();
         
         while(!(name.match(isValidUsername)))
-            puts:"Enter a name with more than 4 character .... "
+            puts:"Enter a name with more than 6 character .... "
             name=gets()
         end
         
@@ -292,8 +294,8 @@ while true
         con=loginFromHash(name ,password)
         puts "The login user details are here"
         if(con)
-            loginUserDetail=con
-            puts "The login User Details.... #{loginUserDetail}"
+            $loginUserDetail=con
+            puts "The login User Details.... #{$loginUserDetail}"
             mainCon=true
             break
         end
@@ -331,8 +333,121 @@ while true
         break
     end
     
-end     #first while end here ......
+end #first while end here ......
 
+
+
+#for use in logout case
+
+def reload
+
+  isValidUsername=/^[0-9A-Za-z ]{6,16}$/
+  isPassWordValidate=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+
+  while true
+ 
+    puts "----------------------------------------Press 1 for signup------------------------------------------------\n
+    ----------------------------------------------Press 2 for login--------------------------------------------------\n
+    ----------------------------------------------Press 3 for exit----------------------------------------------------"
+    chioce=gets.to_i 
+
+     mainCon=false
+    case chioce
+    when 1
+        puts:"-----------------------------------------Welcome to the signup page----------------------------------------"  
+        puts:"Enter your name ::"
+        name=gets();
+        
+        while(!(name.match(isValidUsername)))
+            puts:"Enter a name with more than 6 character .... "
+            name=gets()
+        end
+        
+        puts "Enter your password ::"
+        password=gets()
+        while(!(password.match(isPassWordValidate)))
+            puts "Enter a strong password please::"
+            password=gets()
+        end
+        
+        defaultUser=Bank.new(name,password)
+        userData=defaultUser.userInfos
+        puts "Heres your account details:::"
+        defaultUser.showBankDetail()
+        puts  "-----------------------------------welcome to the login page------------------------------------------"
+        chioce=2
+    
+    # when 2 
+    #     while true
+    #         puts "Please enter your name :::"
+    #         name=gets()
+    #         puts "Please enter your password :::"
+    #         password=gets()
+            
+    #         defaultUser=Bank.new(name,password);
+            
+            
+    #         con=defaultUser.login(name,password)
+            
+    #         if(con)
+    #             break
+    #         end
+    #     end
+
+    when 2
+        while true
+        puts "Please enter your name :::"
+        name=gets()
+        puts "Please enter your password :::"
+        password=gets()
+
+        con=loginFromHash(name ,password)
+        puts "The value of the con is ..... #{con}"
+        if(con)
+            $loginUserDetail=con
+            puts "The login User Details.... #{$loginUserDetail}"
+            mainCon=true
+            break
+        end
+
+    end
+
+
+    
+    when 4
+        while true
+            puts "Please enter your name :::"
+            name=gets()
+            puts "Please enter your password :::"
+            password=gets()
+            
+            con=false
+            
+            con=defaultUser.login(name,password)
+            puts "Login User Details......."
+            
+            if(con)
+                break
+            end
+        end
+    
+    
+    when 3 
+        exit
+    else
+        puts "please enter a valid input value >>>>>>>>"
+
+    end
+
+    if(mainCon)
+        break
+    end
+    
+end  
+
+
+
+end
 
 
 
@@ -364,9 +479,9 @@ while true
             amount=amount.to_f
             end
 
-            loginUserDetail["balance"]+=amount
+            $loginUserDetail["balance"]+=amount
 
-            loginUserAccountDeposite(loginUserDetail)
+            loginUserAccountDeposite($loginUserDetail)
 
         
         # defaultUser.deposite(amount)
@@ -384,7 +499,7 @@ while true
             withdraw=withdraw.to_f
             end
 
-            loginUserAccountWithdraw(loginUserDetail,withdraw)
+            loginUserAccountWithdraw($loginUserDetail,withdraw)
             # defaultUser.withdraw(withdraw)
 
         when 3
@@ -408,41 +523,44 @@ while true
 
         #    con= defaultUser.transferMoney(transfer)
 
-           if( loginUserTransfer(loginUserDetail,transfer))
+           if( loginUserTransfer($loginUserDetail,transfer))
             puts "Money transfer suceessfully"
            end
         when 4
             puts "----------------------------------------Welcome to account detail page---------------------------------------"
             # defaultUser.showBankDetail()
             puts "------------------------------------------------User Details-------------------------------------------------"
-            puts "-------------name :: #{loginUserDetail["name"]}--------------"
-            puts "-------------Account NO:: #{loginUserDetail["accountNo"]}-----------"
-            puts "-------------Balance ::  #{loginUserDetail["balance"]}-----------"
+            puts "-------------name :: #{$loginUserDetail["name"]}--------------"
+            puts "-------------Account NO:: #{$loginUserDetail["accountNo"]}-----------"
+            puts "-------------Balance ::  #{$loginUserDetail["balance"]}-----------"
 
         when 5
-            puts "You have been log out user have been logout ...."
+    #         puts "You have been log out user have been logout ...."
 
-            puts  "-----------------------------------welcome to the login page------------------------------------------"
-               while true
-             puts "Please enter your name :::"
-            name=gets()
-            puts "Please enter your password :::"
-            password=gets()
+    #         puts  "-----------------------------------welcome to the login page------------------------------------------"
+    #            while true
+    #          puts "Please enter your name :::"
+    #         name=gets()
+    #         puts "Please enter your password :::"
+    #         password=gets()
 
-            con=loginFromHash(name ,password)
-                puts "The login user details are here"
-            if(con)
-                loginUserDetail=con
-                puts "The login User Details.... #{loginUserDetail}"
-            break
-        end
-    end
+    #         con=loginFromHash(name ,password)
+    #             puts "The login user details are here"
+    #         if(con)
+    #             loginUserDetail=con
+    #             puts "The login User Details.... #{loginUserDetail}"
+    #         break
+    #     end
+    # end
+        reload()
+        puts "After the reload function....."
+         puts "The loginUSerDetail #{$loginUserDetail}"
         when 6
             puts "---------------------------------------Your session ended you exit the website---------------------------------"
             exit
-        when 7
-            puts "---------------------------------------Here are the balance of the accoun--------------------------------------"
-            defaultUser.checkBalance()
+        # when 7
+        #     puts "---------------------------------------Here are the balance of the accoun--------------------------------------"
+        #     defaultUser.checkBalance()
 
         else
             puts "Please enter a valid option "
